@@ -28,7 +28,7 @@ object TutorialApp {
     })
   }
 
-  val words = loadWords()
+  val dictionary = loadWords()
 
   var textboxes: Array[Element] = makeTextBoxes
 
