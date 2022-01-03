@@ -28,19 +28,24 @@ object TutorialApp {
     })
   }
 
-  var textbox: Element = null
+  val words = loadWords()
+
+  var textboxes: Array[Element] = makeTextBoxes
 
   def setupUI(): Unit = {
     setupNextTextBox()
-
   }
+
+  def loadWords() = Seq()
 
   def setupNextTextBox(): Unit = {
-    textbox = document.createElement("textbox")
-    textbox.textContent = ""
+    textboxes = makeTextBoxes
 
-    document.body.appendChild(textbox)
+    textboxes.foreach(t => document.body.appendChild(t))
   }
+
+  def makeTextBox = document.createElement("textbox")
+  def makeTextBoxes = Array(makeTextBox, makeTextBox, makeTextBox, makeTextBox, makeTextBox)
 
   def appendPar(targetNode: dom.Node, text: String): Unit = {
     val parNode = document.createElement("p")
@@ -56,28 +61,37 @@ object TutorialApp {
   def characterEntered(c: String): Unit = {
     if(guessBeingEntered.length<5) {
       guessBeingEntered = guessBeingEntered + c
-      textbox.textContent = guessBeingEntered
+      updateTextBoxes
     }
   }
 
   def deletePressed(): Unit = {
     if(guessBeingEntered.length>0) {
       guessBeingEntered = guessBeingEntered.substring(0, guessBeingEntered.length - 1)
-      textbox.textContent = guessBeingEntered
+      updateTextBoxes
+    }
+  }
+
+  def updateTextBoxes = {
+    for(n <- 0 to 4) {
+      textboxes(n).textContent= " "
+    }
+    for(n <- 0 to guessBeingEntered.length-1) {
+      textboxes(n).textContent = guessBeingEntered.charAt(n)+""
     }
   }
 
   def enterPressed(): Unit = {
     if(guessBeingEntered.length==5) {
-      var result = ""
-      guessBeingEntered.zip(word).foreach(letters => {
-        if(letters._1==letters._2) { result = result + "Y"}
-        else if(word.toList.contains(letters._1)) { result = result + "y"}
-        else {result = result + "n"}
-      })
-      appendPar(document.body, "Guess vs reality: "+result)
-      guessBeingEntered = ""
 
+      for(n <- 0 to 4) {
+        textboxes(n).classList.add("buttocks")
+        if(guessBeingEntered.charAt(n)==word.charAt(n)) { textboxes(n).classList.add("green")}
+        else if(word.toList.contains(guessBeingEntered.charAt(n))) { textboxes(n).classList.add("orange")}
+      }
+
+      appendPar(document.body, "")
+      guessBeingEntered = ""
       setupNextTextBox()
     }
 
