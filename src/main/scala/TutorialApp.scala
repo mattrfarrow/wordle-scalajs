@@ -5,6 +5,7 @@ import org.scalajs.dom.raw.{Element, KeyboardEvent}
 import scala.util.Random
 
 object TutorialApp {
+
   def main(args: Array[String]): Unit = {
     document.addEventListener("DOMContentLoaded", { (e: dom.Event) =>
       setupUI()
@@ -61,14 +62,14 @@ object TutorialApp {
     localTiles
   }
 
+  private def makeTileRow = Array(makeTile, makeTile, makeTile, makeTile, makeTile)
+
   private def makeTile = {
     val el = document.createElement("div")
     el.classList.add("tile")
     el.classList.add("unchecked")
     el
   }
-
-  private def makeTileRow = Array(makeTile, makeTile, makeTile, makeTile, makeTile)
 
   private def characterEntered(c: String): Unit = {
     if(guessBeingEntered.length<5) {
@@ -81,15 +82,6 @@ object TutorialApp {
     if(guessBeingEntered.length>0) {
       guessBeingEntered = guessBeingEntered.substring(0, guessBeingEntered.length - 1)
       updateTiles()
-    }
-  }
-
-  private def updateTiles(): Unit = {
-    for(n <- 0 to 4) {
-      tiles(roundNum)(n).textContent= ""
-    }
-    for(n <- 0 until guessBeingEntered.length) {
-      tiles(roundNum)(n).textContent = guessBeingEntered.charAt(n).toUpper+""
     }
   }
 
@@ -106,6 +98,15 @@ object TutorialApp {
 
       guessBeingEntered = ""
       roundNum = roundNum+1
+    }
+  }
+
+  private def updateTiles(): Unit = {
+    for(n <- 0 to 4) {
+      tiles(roundNum)(n).textContent= ""
+    }
+    for(n <- 0 until guessBeingEntered.length) {
+      tiles(roundNum)(n).textContent = guessBeingEntered.charAt(n).toUpper+""
     }
   }
 
