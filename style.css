@@ -1,3 +1,10 @@
+#everything {
+  width: 400px;
+  margin: auto;
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+}
+
 .tile {
   font-size: 26px;
   margin: 7px;
@@ -9,8 +16,7 @@
 
   color: white;
   display: inline-block;
-  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-  font-weight: 700;
+
   box-sizing: border-box;
   vertical-align: middle;
 }
