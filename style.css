@@ -17,8 +17,8 @@
 
 
 .unchecked {
-  background: lightgrey;
-  border: 1px dashed black;
+  background: white;
+  border: 1px solid grey;
   color: black;
 }
 .incorrect {
