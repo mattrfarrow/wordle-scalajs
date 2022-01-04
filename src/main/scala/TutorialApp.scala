@@ -29,65 +29,65 @@ object TutorialApp {
 
   var grid: Element = null
 
-  var words = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
+  var words: Seq[String] = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
   var word: String = words(new Random().nextInt(words.length))
-  var guessBeingEntered = ""
+  var guessBeingEntered: String = ""
 
 
   val dictionary = loadWords()
 
-  var textboxes: Array[Element] = makeTextBoxes
+  var tiles: Array[Element] = makeTiles
 
   def setupUI(): Unit = {
     grid = document.getElementById("grid")
 
-    createNextTextBoxRow()
+    createNextTileRow()
   }
 
   def loadWords() = Seq()
 
-  private def createNextTextBoxRow(): Unit = {
+  private def createNextTileRow(): Unit = {
     val rowDiv = document.createElement("div")
     rowDiv.classList.add("row")
 
     val el = document.createElement("div")
     el.classList.add("tile")
-    textboxes = makeTextBoxes
+    tiles = makeTiles
 
-    textboxes.foreach(t => rowDiv.appendChild(t))
+    tiles.foreach(t => rowDiv.appendChild(t))
 
     grid.appendChild(rowDiv)
   }
 
-  private def makeTextBox = {
+  private def makeTile = {
     val el = document.createElement("div")
     el.classList.add("tile")
     el.classList.add("unchecked")
     el
   }
 
-  private def makeTextBoxes = Array(makeTextBox, makeTextBox, makeTextBox, makeTextBox, makeTextBox)
+  private def makeTiles = Array(makeTile, makeTile, makeTile, makeTile, makeTile)
 
   private def characterEntered(c: String): Unit = {
     if(guessBeingEntered.length<5) {
       guessBeingEntered = guessBeingEntered + c
-      updateTextBoxes
+      updateTiles
     }
   }
 
   private def deletePressed(): Unit = {
     if(guessBeingEntered.length>0) {
       guessBeingEntered = guessBeingEntered.substring(0, guessBeingEntered.length - 1)
-      updateTextBoxes
+      updateTiles
     }
   }
 
-  private def updateTextBoxes = {
+  private def updateTiles = {
     for(n <- 0 to 4) {
-      textboxes(n).textContent= ""
+      tiles(n).textContent= ""
     }
     for(n <- 0 to guessBeingEntered.length-1) {
-      textboxes(n).textContent = guessBeingEntered.charAt(n).toUpper+""
+      tiles(n).textContent = guessBeingEntered.charAt(n).toUpper+""
     }
   }
 
@@ -95,15 +95,15 @@ object TutorialApp {
 
     if(guessBeingEntered.length==5) {
       for(n <- 0 to 4) {
-        if(guessBeingEntered.charAt(n)==word.charAt(n)) { textboxes(n).classList.add("correct")}
-        else if(word.toList.contains(guessBeingEntered.charAt(n))) { textboxes(n).classList.add("wrongpos")}
-        else { textboxes(n).classList.add("incorrect")}
+        if(guessBeingEntered.charAt(n)==word.charAt(n)) { tiles(n).classList.add("correct")}
+        else if(word.toList.contains(guessBeingEntered.charAt(n))) { tiles(n).classList.add("wrongpos")}
+        else { tiles(n).classList.add("incorrect")}
 
-        textboxes(n).classList.remove("unchecked")
+        tiles(n).classList.remove("unchecked")
       }
 
       guessBeingEntered = ""
-      createNextTextBoxRow()
+      createNextTileRow()
     }
   }
 
