@@ -46,7 +46,7 @@ object TutorialApp {
 
   def loadWords() = Seq()
 
-  def createNextTextBoxRow(): Unit = {
+  private def createNextTextBoxRow(): Unit = {
     val rowDiv = document.createElement("div")
     rowDiv.classList.add("row")
 
@@ -68,27 +68,21 @@ object TutorialApp {
 
   private def makeTextBoxes = Array(makeTextBox, makeTextBox, makeTextBox, makeTextBox, makeTextBox)
 
-//  private def appendPar(targetNode: dom.Node, text: String): Unit = {
-//    val parNode = document.createElement("p")
-//    parNode.textContent = text
-//    targetNode.appendChild(parNode)
-//  }
-
-  def characterEntered(c: String): Unit = {
+  private def characterEntered(c: String): Unit = {
     if(guessBeingEntered.length<5) {
       guessBeingEntered = guessBeingEntered + c
       updateTextBoxes
     }
   }
 
-  def deletePressed(): Unit = {
+  private def deletePressed(): Unit = {
     if(guessBeingEntered.length>0) {
       guessBeingEntered = guessBeingEntered.substring(0, guessBeingEntered.length - 1)
       updateTextBoxes
     }
   }
 
-  def updateTextBoxes = {
+  private def updateTextBoxes = {
     for(n <- 0 to 4) {
       textboxes(n).textContent= ""
     }
@@ -97,7 +91,7 @@ object TutorialApp {
     }
   }
 
-  def enterPressed(): Unit = {
+  private def enterPressed(): Unit = {
 
     if(guessBeingEntered.length==5) {
       for(n <- 0 to 4) {
@@ -108,7 +102,6 @@ object TutorialApp {
         textboxes(n).classList.remove("unchecked")
       }
 
-      //appendPar(grid, "")
       guessBeingEntered = ""
       createNextTextBoxRow()
     }
