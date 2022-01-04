@@ -2,7 +2,6 @@ import org.scalajs.dom
 import org.scalajs.dom.document
 import org.scalajs.dom.raw.{Element, KeyboardEvent}
 
-import scala.scalajs.js.annotation.JSExportTopLevel
 import scala.util.Random
 
 object TutorialApp {
@@ -28,35 +27,52 @@ object TutorialApp {
     })
   }
 
+  var grid: Element = null
+
+  var words = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
+  var word: String = words(new Random().nextInt(words.length))
+  var guessBeingEntered = ""
+
+
   val dictionary = loadWords()
 
   var textboxes: Array[Element] = makeTextBoxes
 
   def setupUI(): Unit = {
-    setupNextTextBox()
+    grid = document.getElementById("grid")
+
+    createNextTextBoxRow()
   }
 
   def loadWords() = Seq()
 
-  def setupNextTextBox(): Unit = {
+  def createNextTextBoxRow(): Unit = {
+    val rowDiv = document.createElement("div")
+    rowDiv.classList.add("row")
+
+    val el = document.createElement("div")
+    el.classList.add("tile")
     textboxes = makeTextBoxes
 
-    textboxes.foreach(t => document.body.appendChild(t))
+    textboxes.foreach(t => rowDiv.appendChild(t))
+
+    grid.appendChild(rowDiv)
   }
 
-  def makeTextBox = document.createElement("textbox")
-  def makeTextBoxes = Array(makeTextBox, makeTextBox, makeTextBox, makeTextBox, makeTextBox)
-
-  def appendPar(targetNode: dom.Node, text: String): Unit = {
-    val parNode = document.createElement("p")
-    parNode.textContent = text
-    targetNode.appendChild(parNode)
+  private def makeTextBox = {
+    val el = document.createElement("div")
+    el.classList.add("tile")
+    el.classList.add("unchecked")
+    el
   }
 
-  var guessBeingEntered = ""
+  private def makeTextBoxes = Array(makeTextBox, makeTextBox, makeTextBox, makeTextBox, makeTextBox)
 
-  var words = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
-  var word: String = words(new Random().nextInt(words.length))
+//  private def appendPar(targetNode: dom.Node, text: String): Unit = {
+//    val parNode = document.createElement("p")
+//    parNode.textContent = text
+//    targetNode.appendChild(parNode)
+//  }
 
   def characterEntered(c: String): Unit = {
     if(guessBeingEntered.length<5) {
@@ -74,27 +90,28 @@ object TutorialApp {
 
   def updateTextBoxes = {
     for(n <- 0 to 4) {
-      textboxes(n).textContent= " "
+      textboxes(n).textContent= ""
     }
     for(n <- 0 to guessBeingEntered.length-1) {
-      textboxes(n).textContent = guessBeingEntered.charAt(n)+""
+      textboxes(n).textContent = guessBeingEntered.charAt(n).toUpper+""
     }
   }
 
   def enterPressed(): Unit = {
-    if(guessBeingEntered.length==5) {
 
+    if(guessBeingEntered.length==5) {
       for(n <- 0 to 4) {
-        textboxes(n).classList.add("buttocks")
-        if(guessBeingEntered.charAt(n)==word.charAt(n)) { textboxes(n).classList.add("green")}
-        else if(word.toList.contains(guessBeingEntered.charAt(n))) { textboxes(n).classList.add("orange")}
+        if(guessBeingEntered.charAt(n)==word.charAt(n)) { textboxes(n).classList.add("correct")}
+        else if(word.toList.contains(guessBeingEntered.charAt(n))) { textboxes(n).classList.add("wrongpos")}
+        else { textboxes(n).classList.add("incorrect")}
+
+        textboxes(n).classList.remove("unchecked")
       }
 
-      appendPar(document.body, "")
+      //appendPar(grid, "")
       guessBeingEntered = ""
-      setupNextTextBox()
+      createNextTextBoxRow()
     }
-
   }
 
 }
