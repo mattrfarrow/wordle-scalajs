@@ -1,8 +1,15 @@
 #everything {
-  width: 400px;
+  width: 350px;
   margin: auto;
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 700;
+}
+
+#not-found-msg {
+  margin: auto;
+  width: 280px;
+  padding-top: 75px;
+  padding-bottom: 75px;
 }
 
 .tile {
@@ -19,6 +26,8 @@
 
   box-sizing: border-box;
   vertical-align: middle;
+
+  text-transform: uppercase;
 }
 
 
@@ -37,4 +46,47 @@
 
 .wrongpos {
   background: #b59f3b;
+}
+
+#keyboard {
+  margin-top: 50px;
+  width: 500px;
+  margin: auto;
+
+}
+
+.key-line {
+  margin:auto;
+  width: 450px;
+}
+
+.key {
+  width: 40px;
+  height: 55px;
+  margin-left: 2px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  border: none;
+  text-weight:400;
+  background: lightgrey;
+}
+
+.widekey {
+  width: 61px;
+  height: 55px;
+  margin-left: 2px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  border: none;
+  text-weight:400;
+  background: lightgrey;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.spacer {
+  width: 24px;
+  visibility: hidden;
 }

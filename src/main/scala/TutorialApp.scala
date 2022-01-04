@@ -1,7 +1,9 @@
+
+
 import org.scalajs.dom
 import org.scalajs.dom.document
 import org.scalajs.dom.raw.{Element, KeyboardEvent}
-
+import scala.scalajs.js.timers.setTimeout
 import scala.util.Random
 
 object TutorialApp {
@@ -30,18 +32,26 @@ object TutorialApp {
 
   var grid: Element = _
   var tiles: Array[Array[Element]] = _
+  var notFoundMsg: Element = _
 
-  val dictionary: Seq[String] = loadDictionary()
+  val dictionary: Array[String] = Words.words
+  val challengeWords = Words.candidateWords
 
-  var words: Seq[String] = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
-  var word: String = words(new Random().nextInt(words.length))
+  val keyboardKeys = Seq("qwertyuiop", "asdfghjkl", "zxcvbnm")
+
+  var word: String = challengeWords(new Random().nextInt(challengeWords.length))
   var guessBeingEntered: String = ""
   var roundNum = 0
 
   def setupUI(): Unit = {
+    System.out.println(word)
     grid = document.getElementById("grid")
+    notFoundMsg = document.getElementById("not-found-msg")
+    notFoundMsg.classList.add("invisible")
 
     tiles = createTiles()
+    addKeyboard()
+    System.out.println(word)
   }
 
   def loadDictionary() = Seq()
@@ -88,6 +98,13 @@ object TutorialApp {
   private def enterPressed(): Unit = {
 
     if(guessBeingEntered.length==5) {
+      if (!dictionary.contains(guessBeingEntered) && !challengeWords.contains(guessBeingEntered)) {
+        notFoundMsg.classList.remove("invisible")
+        setTimeout(1000) {
+          notFoundMsg.classList.add("invisible")
+        }
+        return
+      }
       for(n <- 0 to 4) {
         if(guessBeingEntered.charAt(n)==word.charAt(n)) { tiles(roundNum)(n).classList.add("correct")}
         else if(word.toList.contains(guessBeingEntered.charAt(n))) { tiles(roundNum)(n).classList.add("wrongpos")}
@@ -106,8 +123,57 @@ object TutorialApp {
       tiles(roundNum)(n).textContent= ""
     }
     for(n <- 0 until guessBeingEntered.length) {
-      tiles(roundNum)(n).textContent = guessBeingEntered.charAt(n).toUpper+""
+      tiles(roundNum)(n).textContent = guessBeingEntered.charAt(n).toString
     }
+  }
+
+  private def addKeyboard(): Unit = {
+    val keyboard = document.getElementById("keyboard")
+
+    for(keyLine <- 0 to 2) {
+      val rowDiv = document.createElement("div")
+      rowDiv.classList.add("key-line")
+
+      if(keyLine==1) {
+        val spacer = document.createElement("button")
+        spacer.classList.add("spacer")
+        rowDiv.appendChild(spacer)
+      }
+
+      for(key <- keyboardKeys(keyLine).toCharArray) {
+        val button = document.createElement("button")
+        button.textContent = key.toString
+        button.classList.add("key")
+        button.addEventListener("click", { (e: dom.MouseEvent) =>
+          characterEntered(key.toString)
+        })
+        rowDiv.appendChild(button)
+      }
+
+      if(keyLine==2) {
+        val button = document.createElement("button")
+        button.textContent = "Enter"
+        button.classList.add("widekey")
+        button.addEventListener("click", { (e: dom.MouseEvent) =>
+          enterPressed()
+        })
+        rowDiv.appendChild(button)
+      }
+      if(keyLine==2) {
+        val button = document.createElement("button")
+        button.textContent = "DEL"
+        button.classList.add("widekey")
+        button.addEventListener("click", { (e: dom.MouseEvent) =>
+          deletePressed()
+        })
+        rowDiv.appendChild(button)
+      }
+
+      keyboard.appendChild(rowDiv)
+    }
+
+
+
   }
 
 }
