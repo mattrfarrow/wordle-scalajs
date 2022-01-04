@@ -27,36 +27,40 @@ object TutorialApp {
     })
   }
 
-  var grid: Element = null
+  var grid: Element = _
 
   var words: Seq[String] = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
   var word: String = words(new Random().nextInt(words.length))
   var guessBeingEntered: String = ""
 
 
-  val dictionary = loadWords()
+  val dictionary: Seq[String] = loadWords()
 
-  var tiles: Array[Element] = makeTiles
+  var tiles: Array[Array[Element]] = _
+  var roundNum = 0
 
   def setupUI(): Unit = {
     grid = document.getElementById("grid")
 
-    createNextTileRow()
+    tiles = createTiles()
   }
 
   def loadWords() = Seq()
 
-  private def createNextTileRow(): Unit = {
-    val rowDiv = document.createElement("div")
-    rowDiv.classList.add("row")
+  private def createTiles(): Array[Array[Element]] = {
+    val localTiles = Array.fill[Array[Element]](6)(Array[Element]())
 
-    val el = document.createElement("div")
-    el.classList.add("tile")
-    tiles = makeTiles
+    for(rowNum <- 0 to 5){
+      val rowDiv = document.createElement("div")
+      rowDiv.classList.add("row")
 
-    tiles.foreach(t => rowDiv.appendChild(t))
+      localTiles(rowNum) = makeTileRow
 
-    grid.appendChild(rowDiv)
+      localTiles(rowNum).foreach(t => rowDiv.appendChild(t))
+
+      grid.appendChild(rowDiv)
+    }
+    localTiles
   }
 
   private def makeTile = {
@@ -66,28 +70,28 @@ object TutorialApp {
     el
   }
 
-  private def makeTiles = Array(makeTile, makeTile, makeTile, makeTile, makeTile)
+  private def makeTileRow = Array(makeTile, makeTile, makeTile, makeTile, makeTile)
 
   private def characterEntered(c: String): Unit = {
     if(guessBeingEntered.length<5) {
       guessBeingEntered = guessBeingEntered + c
-      updateTiles
+      updateTiles()
     }
   }
 
   private def deletePressed(): Unit = {
     if(guessBeingEntered.length>0) {
       guessBeingEntered = guessBeingEntered.substring(0, guessBeingEntered.length - 1)
-      updateTiles
+      updateTiles()
     }
   }
 
-  private def updateTiles = {
+  private def updateTiles(): Unit = {
     for(n <- 0 to 4) {
-      tiles(n).textContent= ""
+      tiles(roundNum)(n).textContent= ""
     }
-    for(n <- 0 to guessBeingEntered.length-1) {
-      tiles(n).textContent = guessBeingEntered.charAt(n).toUpper+""
+    for(n <- 0 until guessBeingEntered.length) {
+      tiles(roundNum)(n).textContent = guessBeingEntered.charAt(n).toUpper+""
     }
   }
 
@@ -95,15 +99,15 @@ object TutorialApp {
 
     if(guessBeingEntered.length==5) {
       for(n <- 0 to 4) {
-        if(guessBeingEntered.charAt(n)==word.charAt(n)) { tiles(n).classList.add("correct")}
-        else if(word.toList.contains(guessBeingEntered.charAt(n))) { tiles(n).classList.add("wrongpos")}
-        else { tiles(n).classList.add("incorrect")}
+        if(guessBeingEntered.charAt(n)==word.charAt(n)) { tiles(roundNum)(n).classList.add("correct")}
+        else if(word.toList.contains(guessBeingEntered.charAt(n))) { tiles(roundNum)(n).classList.add("wrongpos")}
+        else { tiles(roundNum)(n).classList.add("incorrect")}
 
-        tiles(n).classList.remove("unchecked")
+        tiles(roundNum)(n).classList.remove("unchecked")
       }
 
       guessBeingEntered = ""
-      createNextTileRow()
+      roundNum = roundNum+1
     }
   }
 
