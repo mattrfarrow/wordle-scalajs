@@ -28,15 +28,13 @@ object TutorialApp {
   }
 
   var grid: Element = _
+  var tiles: Array[Array[Element]] = _
+
+  val dictionary: Seq[String] = loadDictionary()
 
   var words: Seq[String] = List("calls", "round", "hound", "evils", "badge", "reset", "nutty", "whose")
   var word: String = words(new Random().nextInt(words.length))
   var guessBeingEntered: String = ""
-
-
-  val dictionary: Seq[String] = loadWords()
-
-  var tiles: Array[Array[Element]] = _
   var roundNum = 0
 
   def setupUI(): Unit = {
@@ -45,7 +43,7 @@ object TutorialApp {
     tiles = createTiles()
   }
 
-  def loadWords() = Seq()
+  def loadDictionary() = Seq()
 
   private def createTiles(): Array[Array[Element]] = {
     val localTiles = Array.fill[Array[Element]](6)(Array[Element]())
