@@ -1,23 +1,39 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  touch-action: manipulation;
+}
+
 #everything {
-  width: 350px;
-  margin: auto;
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 700;
+  margin: auto;
+}
+
+#header {
+  width: 350px;
+  margin: auto;
+}
+
+#grid {
+  width: 420px;
+  margin: auto;
 }
 
 #not-found-msg {
   margin: auto;
-  width: 280px;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  width: 400px;
 }
 
 .tile {
-  font-size: 26px;
+  font-size: 36px;
   margin: 7px;
-  width: 50px;
-  height: 50px;
-  padding-left: 15px;
+  width: 65px;
+  height: 65px;
+  padding-left: 20px;
   padding-top: 10px;
   padding-bottom: 0px;
 
@@ -48,8 +64,8 @@
 }
 
 #keyboard {
-  padding-top: 50px;
-  width: 500px;
+  padding-top: 20px;
+  width: 100%;
   margin: auto;
 }
 
@@ -60,8 +76,8 @@
 
 .key {
   width: 40px;
-  height: 55px;
-  margin-left: 2px;
+  height: 70px;
+  margin-left: 4px;
   margin-bottom: 5px;
   text-transform: uppercase;
   border: none;
@@ -69,10 +85,25 @@
   background: lightgrey;
 }
 
+.correct-key{
+    background: #6aaa65;
+    color: white;
+}
+
+.incorrect-key{
+    background: grey;
+    color: white;
+}
+
+.wrongpos-key{
+    background: #b59f3b;
+    color: white;
+}
+
 .widekey {
   width: 61px;
-  height: 55px;
-  margin-left: 2px;
+  height: 70px;
+  margin-left: 4px;
   margin-bottom: 5px;
   text-transform: uppercase;
   border: none;
