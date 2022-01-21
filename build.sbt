@@ -1,4 +1,4 @@
-name := "scala-js-play"
+name := "scala-js-wordle"
 
 version := "0.1"
 
